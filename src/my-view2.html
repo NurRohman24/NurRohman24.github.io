@@ -1,0 +1,99 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-lazy-pages/iron-lazy-pages.html">
+<link rel="import" href="../bower_components/paper-card/paper-card.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-view2">
+  <template>
+    <style include="shared-styles">
+        :host {
+            display: block;
+            /*background-color: red;*/
+            /*padding: 10px;*/
+        }
+        .custom-card {
+            margin:5 !important;
+            background-color: #fff;
+            /*border-radius:0 !important;*/
+        }
+
+        paper-card.dark, paper-card.amber, paper-card.lime, paper-card.cyan {
+            color: white;
+            --paper-card-header-color: white;
+        }
+        .title-text {
+            padding: 5px;
+        }
+    </style>
+
+    <div class="card">
+            <paper-tabs selected="{{route}}" attr-for-selected="key">
+                <paper-tab key="foo">Foo</paper-tab>
+                <paper-tab key="bar">Bar</paper-tab>
+                <paper-tab key="baz">Baz!</paper-tab>
+            </paper-tabs>
+    
+            <iron-lazy-pages attr-for-selected="data-route" selected="{{route}}" loading="{{loading}}" hide-immediately>
+                <template is="iron-lazy-page" data-route="foo">
+                    <!-- <x-foo></x-foo> -->
+                        <iron-ajax url="../data-json/test-list.json" last-response="{{data}}" auto></iron-ajax>
+                        <iron-list items="[[data]]" as="item">
+                            <template>
+
+                                <paper-card heading="[[item.name]]" alt="[[item.name]]" on-tap="confirmClick" data-asep="Nama Gue">
+                                    <div class="card-content">
+                                      Emmentaler or Emmental is a yellow, medium-hard cheese...
+                                    </div>
+                                  </paper-card>
+                                <!-- <div>
+                                    Name: [[item.name]]
+                                </div> -->
+                            </template>
+                        </iron-list>
+                </template>
+                <template is="iron-lazy-page" data-route="bar" path="/src/x-foo.html">
+                    <x-foo></x-foo>
+                    <!-- <h3>Foo Page</h3>
+                    <span>Ini page Bar</span>
+                    ok dicoba -->
+                </template>
+                <template is="iron-lazy-page" data-route="baz">
+                    <h3>Baz page</h3>
+                    <span>from inline template</span>
+                </template>
+            </iron-lazy-pages>
+            <paper-spinner active="[[loading]]"></paper-spinner>
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+        is: 'my-view2',
+        properties: {
+        },
+        // listeners:{
+        //     confirmClick:function(event){
+        //         console.log(event);
+        //     }
+        // },
+        confirmClick:function(event){
+            const e = event.target.dataset;
+            console.log(e);
+            console.log(event);
+        }
+    });
+  </script>
+</dom-module>
